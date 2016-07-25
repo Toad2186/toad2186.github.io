@@ -46,7 +46,7 @@ sudo dpkg -i hugo_0.16-1_amd64.deb
 # --baseURL I assume determines the HTTP Host header that our hugo HTTP server accepts. By default this is localhost and will not work if the development environment isn&#39;t localhost, even if one sets the bind address differently
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Personally I think hugo should be changed so that &lt;code&gt;--baseURL&lt;/code&gt; isn&amp;rsquo;t necessary. &lt;code&gt;hugo&lt;/code&gt; doesn&amp;rsquo;t seem to allow a single process to host multiple sites (virtual hosts) so there&amp;rsquo;s no point in reqh&lt;/p&gt;
+&lt;p&gt;Personally I think hugo should be changed so that &lt;code&gt;--baseURL&lt;/code&gt; isn&amp;rsquo;t necessary. &lt;code&gt;hugo&lt;/code&gt; doesn&amp;rsquo;t seem to allow a single process to host multiple sites (virtual hosts) so there&amp;rsquo;s no point in requiring this parameter.&lt;/p&gt;
 
 &lt;h3 id=&#34;steam&#34;&gt;&lt;strong&gt;Steam&lt;/strong&gt;&lt;/h3&gt;
 
