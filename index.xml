@@ -10,6 +10,68 @@
     <atom:link href="http://toanvuong.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Hello World!</title>
+      <link>http://toanvuong.io/post/hello-world/</link>
+      <pubDate>Sun, 24 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://toanvuong.io/post/hello-world/</guid>
+      <description>
+
+&lt;h3 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;ve been meaning to do this for a while but the planets have never aligned properly until today. This website will server as a dump for my thoughts which will mostly cover various software engineering related topics with occasional random thoughts in between. Whatever comes to my mind that I think is important to be recorded.&lt;/p&gt;
+
+&lt;h3 id=&#34;hugo&#34;&gt;&lt;strong&gt;Hugo&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; is a static website generator. Given a pre-defined set of constraints and configurations and a set of inputs (In this case in &lt;a href=&#34;https://github.com/toml-lang/toml&#34;&gt;toml&lt;/a&gt; and &lt;a href=&#34;https://daringfireball.net/projects/markdown/&#34;&gt;markdown&lt;/a&gt; format), static website generators will generate a website for you, converting your inputs into static html files which can then be served using a webserver such as &lt;a href=&#34;https://httpd.apache.org/&#34;&gt;apache&lt;/a&gt; or &lt;a href=&#34;https://www.nginx.com/resources/wiki/&#34;&gt;nginx&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;why-hugo&#34;&gt;&lt;strong&gt;Why Hugo?&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;Luck. In choosing Hugo, I started out by Googling for static website generators, which led me to a whole slew of them listed on a certain &lt;a href=&#34;https://www.staticgen.com/&#34;&gt;website&lt;/a&gt;. From there, I merely clicked on one semi-randomly. I didn&amp;rsquo;t care much about compilation speed since I didn&amp;rsquo;t think I&amp;rsquo;d have a whole lot of content that such a thing would matter. I &lt;em&gt;did&lt;/em&gt; care that it should be simple to use, as I didn&amp;rsquo;t want the tool to be in control and Hugo&amp;rsquo;s documentation advertises a new hugo site in 2 under minutes!&lt;/p&gt;
+
+&lt;p&gt;As it turns out, that number is fairly accurate. I grabbed the most recent &lt;a href=&#34;https://github.com/spf13/hugo/releases/tag/v0.16&#34;&gt;release&lt;/a&gt;, installed the Debian package on my Ubuntu 16.04 VM:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;wget https://github.com/spf13/hugo/releases/download/v0.16/hugo_0.16-1_amd64.deb
+sudo dpkg -i hugo_0.16-1_amd64.deb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Instructions for other platforms can be found on Hugo&amp;rsquo;s website.&lt;/p&gt;
+
+&lt;p&gt;Installing hugo gives us the hugo binary, and things are fairly straight forward from here so I won&amp;rsquo;t beat the deadhorse. This &lt;a href=&#34;https://gohugo.io/overview/quickstart/&#34;&gt;quickstart&lt;/a&gt; guide should be all you need!&lt;/p&gt;
+
+&lt;p&gt;The biggest annoyance I found was that my development environment wasn&amp;rsquo;t on localhost and thus a few special parameters to hugo was required. My full debug command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; hugo server --bind &amp;quot;192.168.1.121&amp;quot; --baseURL &amp;quot;http://192.168.1.121/&amp;quot; --buildDrafts --theme=hugo-steam-theme
+# --bind Binds to a specific IP address
+# --baseURL I assume determines the HTTP Host header that our hugo HTTP server accepts. By default this is localhost and will not work if the development environment isn&#39;t localhost, even if one sets the bind address differently
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Personally I think hugo should be changed so that &lt;code&gt;--baseURL&lt;/code&gt; isn&amp;rsquo;t necessary. &lt;code&gt;hugo&lt;/code&gt; doesn&amp;rsquo;t seem to allow a single process to host multiple sites (virtual hosts) so there&amp;rsquo;s no point in reqh&lt;/p&gt;
+
+&lt;h3 id=&#34;steam&#34;&gt;&lt;strong&gt;Steam&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;I chose &lt;a href=&#34;http://themes.gohugo.io/theme/steam/post/creating-a-new-theme/&#34;&gt;steam&lt;/a&gt; for its simplicity. Being new to Hugo, it took a little while to get everything running smoothly. The biggest thing here is to be sure to follow the theme&amp;rsquo;s installation instructions and look at the &lt;code&gt;hugo-steam-theme/exampleSite&lt;/code&gt; directory for usage examples.&lt;/p&gt;
+
+&lt;h3 id=&#34;hosting&#34;&gt;&lt;strong&gt;Hosting&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;m not a stranger to hosting services&amp;ndash;I have two VPSes, a Digital Ocean Droplet, and I&amp;rsquo;ve also used S3/Cloudfront at work. What I cared most about here was simplicity in hosting. I opted to use &lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Pages&lt;/a&gt; for this task. Let me preface by saying that this isn&amp;rsquo;t necessary, and by default if you name your repo &lt;code&gt;&amp;lt;github_handle&amp;gt;.github.io&lt;/code&gt; then the whole repo will be served out of the box without any issues. So by this point, &lt;a href=&#34;http://toad2186.github.io&#34;&gt;http://toad2186.github.io&lt;/a&gt; is already accessible. What I wanted was for &lt;a href=&#34;http://toanvuong.io&#34;&gt;http://toanvuong.io&lt;/a&gt; to be accessible and serving the same&lt;/p&gt;
+
+&lt;p&gt;This, in itself, wasn&amp;rsquo;t too difficult as I&amp;rsquo;m somewhat familiar with DNS. Basically you point the DNS for your domain to point to various Github servers. This can either be your apex domain (e.g. &lt;code&gt;toanvuong.io&lt;/code&gt;) or www (e.g. &lt;code&gt;www.toanvuong.io&lt;/code&gt;) domain. Github has a great &lt;a href=&#34;https://help.github.com/articles/using-a-custom-domain-with-github-pages/&#34;&gt;guide&lt;/a&gt; on how to do this.&lt;/p&gt;
+
+&lt;p&gt;Note that Github will serve your whole directory, and due to the way hugo works,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo --theme=hugo-steam-theme
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;generates your website under the &lt;code&gt;public&lt;/code&gt; directory. So you&amp;rsquo;ll end up having to go to &lt;code&gt;toanvuong.io/public/&lt;/code&gt;, and even then, this won&amp;rsquo;t work due to the way &lt;code&gt;hugo&lt;/code&gt; generates links: namely, &lt;code&gt;hugo&lt;/code&gt; generates &lt;a href=&#34;http://www.coffeecup.com/help/articles/absolute-vs-relative-pathslinks/&#34;&gt;absolute&lt;/a&gt; links. This means that resources will be requested from &lt;code&gt;http://toanvuong.io/js/...&lt;/code&gt; for example, which is all wrong.&lt;/p&gt;
+
+&lt;p&gt;To get around this, I have two git repos. My main (source) repo is at &lt;code&gt;https://github.com/Toad2186/toad2186.github.io.src&lt;/code&gt; and I&amp;rsquo;ve created &lt;code&gt;https://github.com/Toad2186/toad2186.github.io&lt;/code&gt; just for the &lt;code&gt;public&lt;/code&gt; directory. Simple, but works. Shoot my a message if you&amp;rsquo;ve got a better idea! Quite frankly, I&amp;rsquo;m surprised Github doesn&amp;rsquo;t allow one to customize the root directory&amp;ndash;seems like it&amp;rsquo;d be a frequently requested feature given that static website generators would probably create these &amp;ldquo;build&amp;rdquo; directories as an output! Perhaps this has something to do with their integration with &lt;a href=&#34;https://help.github.com/articles/using-jekyll-as-a-static-site-generator-with-github-pages/&#34;&gt;Jekyll&lt;/a&gt;. This brings me to my next point, we&amp;rsquo;d need to add a &lt;code&gt;.nojekyll&lt;/code&gt; (which can be an empty file) to the public folder so that github ignores its automatic jekyll build.&lt;/p&gt;
+
+&lt;p&gt;My last gripe with Github hosting is the lack of https which is sensible given the constraints. Unless they do some man-in-the-middle decryption/encryption or have an option for users to upload SSL certificates for their personal domains, it&amp;rsquo;s not possible for Github to provide HTTPS hosting. Furthermore, virtual hosts (which is what I assume Github uses) gets complicated with HTTPS since the HTTP Host header is no longer readable&amp;ndash;A &lt;a href=&#34;https://www.digitalocean.com/community/tutorials/how-to-set-up-multiple-ssl-certificates-on-one-ip-with-apache-on-ubuntu-12-04&#34;&gt;TLS Server Name Indication extension&lt;/a&gt;is required for such a feat. So it&amp;rsquo;s possible, but difficult. For now though, since there isn&amp;rsquo;t any sensitive information flowing through these pages, http should be fine :).&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>about</title>
       <link>http://toanvuong.io/about/</link>
       <pubDate>Sun, 24 Jul 2016 00:00:00 +0000</pubDate>
@@ -26,18 +88,6 @@
       
       <guid>http://toanvuong.io/contact/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>setup</title>
-      <link>http://toanvuong.io/post/setup/</link>
-      <pubDate>Sun, 24 Jul 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://toanvuong.io/post/setup/</guid>
-      <description>&lt;p&gt;First setup&lt;/p&gt;
-
-&lt;p&gt;Second&lt;/p&gt;
-</description>
     </item>
     
   </channel>
