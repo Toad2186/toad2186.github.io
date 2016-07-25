@@ -101,6 +101,8 @@ sudo dpkg -i hugo_0.16-1_amd64.deb
 
 <p>I chose <a href="http://themes.gohugo.io/theme/steam/post/creating-a-new-theme/">steam</a> for its simplicity. Being new to Hugo, it took a little while to get everything running smoothly. The biggest thing here is to be sure to follow the theme&rsquo;s installation instructions and look at the <code>hugo-steam-theme/exampleSite</code> directory for usage examples.</p>
 
+<p>Another nice thing about steam is the ability to have custom pages with links. So this website can be used as a multi-purpose site rather than a blog-only page!</p>
+
 <h3 id="hosting"><strong>Hosting</strong></h3>
 
 <p>I&rsquo;m not a stranger to hosting services&ndash;I have two VPSes, a Digital Ocean Droplet, and I&rsquo;ve also used S3/Cloudfront at work. What I cared most about here was simplicity in hosting. I opted to use <a href="https://pages.github.com/">Github Pages</a> for this task. Let me preface by saying that this isn&rsquo;t necessary, and by default if you name your repo <code>&lt;github_handle&gt;.github.io</code> then the whole repo will be served out of the box without any issues. So by this point, <a href="http://toad2186.github.io">http://toad2186.github.io</a> is already accessible. What I wanted was for <a href="http://toanvuong.io">http://toanvuong.io</a> to be accessible and serving the same</p>
@@ -117,6 +119,8 @@ sudo dpkg -i hugo_0.16-1_amd64.deb
 <p>To get around this, I have two git repos. My main (source) repo is at <code>https://github.com/Toad2186/toad2186.github.io.src</code> and I&rsquo;ve created <code>https://github.com/Toad2186/toad2186.github.io</code> just for the <code>public</code> directory. Simple, but works. Shoot my a message if you&rsquo;ve got a better idea! Quite frankly, I&rsquo;m surprised Github doesn&rsquo;t allow one to customize the root directory&ndash;seems like it&rsquo;d be a frequently requested feature given that static website generators would probably create these &ldquo;build&rdquo; directories as an output! Perhaps this has something to do with their integration with <a href="https://help.github.com/articles/using-jekyll-as-a-static-site-generator-with-github-pages/">Jekyll</a>. This brings me to my next point, we&rsquo;d need to add a <code>.nojekyll</code> (which can be an empty file) to the public folder so that github ignores its automatic jekyll build.</p>
 
 <p>My last gripe with Github hosting is the lack of https which is sensible given the constraints. Unless they do some man-in-the-middle decryption/encryption or have an option for users to upload SSL certificates for their personal domains, it&rsquo;s not possible for Github to provide HTTPS hosting. Furthermore, virtual hosts (which is what I assume Github uses) gets complicated with HTTPS since the HTTP Host header is no longer readable&ndash;A <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-multiple-ssl-certificates-on-one-ip-with-apache-on-ubuntu-12-04">TLS Server Name Indication extension</a>is required for such a feat. So it&rsquo;s possible, but difficult. For now though, since there isn&rsquo;t any sensitive information flowing through these pages, http should be fine :).</p>
+
+<p>All in all, it was rather simple and saved me the need to setup nginx on one of my existing virtual servers (or worse, spin up a new VPS!). Github it is, until I find a better host!</p>
 
 	        </section>
 
