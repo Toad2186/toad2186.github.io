@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>toan&#39;s thoughts</title>
+    <link>http://toanvuong.io/</link>
+    <description>Recent content on toan&#39;s thoughts</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 24 Jul 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://toanvuong.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>about</title>
+      <link>http://toanvuong.io/about/</link>
+      <pubDate>Sun, 24 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://toanvuong.io/about/</guid>
+      <description>&lt;p&gt;About&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>contact</title>
+      <link>http://toanvuong.io/contact/</link>
+      <pubDate>Sun, 24 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://toanvuong.io/contact/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>setup</title>
+      <link>http://toanvuong.io/post/setup/</link>
+      <pubDate>Sun, 24 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://toanvuong.io/post/setup/</guid>
+      <description>&lt;p&gt;First setup&lt;/p&gt;
+
+&lt;p&gt;Second&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
