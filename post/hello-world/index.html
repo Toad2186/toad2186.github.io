@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Hello World! &middot; toan&#39;s thoughts</title>
+    <meta name="author" content="Toan Vuong">
+    <meta name="description" content="Home of the other part of my brain">
+    <meta name="generator" content="Hugo 0.16" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://toanvuong.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.2/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://toanvuong.io/css/screen.css">
+    <link rel="stylesheet" href="http://toanvuong.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/default.min.css">
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="post-template">
+
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://toanvuong.io/">toan&rsquo;s thoughts</a></h1>
+	
+	
+	<h1 class="blog-subtitle">random brain dump</h1>
+	
+</header>
+    
+<nav class="menu" role="nav">
+    <ul>
+        
+        	<li class="nav nav-current"><a href="/about/">about</a></li>
+      	
+        	<li class="nav nav-current"><a href="/contact/">contact</a></li>
+      	
+    </ul>
+</nav>
+
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">Hello World!</h1>
+	        <div class="post-meta"><time datetime="24 July 2016">24 July 2016</time></div>
+	        </header>
+
+	        <section class="post-content">
+	            
+
+<h3 id="introduction"><strong>Introduction</strong></h3>
+
+<p>I&rsquo;ve been meaning to do this for a while but the planets have never aligned properly until today. This website will server as a dump for my thoughts which will mostly cover various software engineering related topics with occasional random thoughts in between. Whatever comes to my mind that I think is important to be recorded.</p>
+
+<h3 id="hugo"><strong>Hugo</strong></h3>
+
+<p><a href="https://gohugo.io/">Hugo</a> is a static website generator. Given a pre-defined set of constraints and configurations and a set of inputs (In this case in <a href="https://github.com/toml-lang/toml">toml</a> and <a href="https://daringfireball.net/projects/markdown/">markdown</a> format), static website generators will generate a website for you, converting your inputs into static html files which can then be served using a webserver such as <a href="https://httpd.apache.org/">apache</a> or <a href="https://www.nginx.com/resources/wiki/">nginx</a>.</p>
+
+<h3 id="why-hugo"><strong>Why Hugo?</strong></h3>
+
+<p>Luck. In choosing Hugo, I started out by Googling for static website generators, which led me to a whole slew of them listed on a certain <a href="https://www.staticgen.com/">website</a>. From there, I merely clicked on one semi-randomly. I didn&rsquo;t care much about compilation speed since I didn&rsquo;t think I&rsquo;d have a whole lot of content that such a thing would matter. I <em>did</em> care that it should be simple to use, as I didn&rsquo;t want the tool to be in control and Hugo&rsquo;s documentation advertises a new hugo site in 2 under minutes!</p>
+
+<p>As it turns out, that number is fairly accurate. I grabbed the most recent <a href="https://github.com/spf13/hugo/releases/tag/v0.16">release</a>, installed the Debian package on my Ubuntu 16.04 VM:</p>
+
+<pre><code>wget https://github.com/spf13/hugo/releases/download/v0.16/hugo_0.16-1_amd64.deb
+sudo dpkg -i hugo_0.16-1_amd64.deb
+</code></pre>
+
+<p>Instructions for other platforms can be found on Hugo&rsquo;s website.</p>
+
+<p>Installing hugo gives us the hugo binary, and things are fairly straight forward from here so I won&rsquo;t beat the deadhorse. This <a href="https://gohugo.io/overview/quickstart/">quickstart</a> guide should be all you need!</p>
+
+<p>The biggest annoyance I found was that my development environment wasn&rsquo;t on localhost and thus a few special parameters to hugo was required. My full debug command:</p>
+
+<pre><code> hugo server --bind &quot;192.168.1.121&quot; --baseURL &quot;http://192.168.1.121/&quot; --buildDrafts --theme=hugo-steam-theme
+# --bind Binds to a specific IP address
+# --baseURL I assume determines the HTTP Host header that our hugo HTTP server accepts. By default this is localhost and will not work if the development environment isn't localhost, even if one sets the bind address differently
+</code></pre>
+
+<p>Personally I think hugo should be changed so that <code>--baseURL</code> isn&rsquo;t necessary. <code>hugo</code> doesn&rsquo;t seem to allow a single process to host multiple sites (virtual hosts) so there&rsquo;s no point in reqh</p>
+
+<h3 id="steam"><strong>Steam</strong></h3>
+
+<p>I chose <a href="http://themes.gohugo.io/theme/steam/post/creating-a-new-theme/">steam</a> for its simplicity. Being new to Hugo, it took a little while to get everything running smoothly. The biggest thing here is to be sure to follow the theme&rsquo;s installation instructions and look at the <code>hugo-steam-theme/exampleSite</code> directory for usage examples.</p>
+
+<h3 id="hosting"><strong>Hosting</strong></h3>
+
+<p>I&rsquo;m not a stranger to hosting services&ndash;I have two VPSes, a Digital Ocean Droplet, and I&rsquo;ve also used S3/Cloudfront at work. What I cared most about here was simplicity in hosting. I opted to use <a href="https://pages.github.com/">Github Pages</a> for this task. Let me preface by saying that this isn&rsquo;t necessary, and by default if you name your repo <code>&lt;github_handle&gt;.github.io</code> then the whole repo will be served out of the box without any issues. So by this point, <a href="http://toad2186.github.io">http://toad2186.github.io</a> is already accessible. What I wanted was for <a href="http://toanvuong.io">http://toanvuong.io</a> to be accessible and serving the same</p>
+
+<p>This, in itself, wasn&rsquo;t too difficult as I&rsquo;m somewhat familiar with DNS. Basically you point the DNS for your domain to point to various Github servers. This can either be your apex domain (e.g. <code>toanvuong.io</code>) or www (e.g. <code>www.toanvuong.io</code>) domain. Github has a great <a href="https://help.github.com/articles/using-a-custom-domain-with-github-pages/">guide</a> on how to do this.</p>
+
+<p>Note that Github will serve your whole directory, and due to the way hugo works,</p>
+
+<pre><code>hugo --theme=hugo-steam-theme
+</code></pre>
+
+<p>generates your website under the <code>public</code> directory. So you&rsquo;ll end up having to go to <code>toanvuong.io/public/</code>, and even then, this won&rsquo;t work due to the way <code>hugo</code> generates links: namely, <code>hugo</code> generates <a href="http://www.coffeecup.com/help/articles/absolute-vs-relative-pathslinks/">absolute</a> links. This means that resources will be requested from <code>http://toanvuong.io/js/...</code> for example, which is all wrong.</p>
+
+<p>To get around this, I have two git repos. My main (source) repo is at <code>https://github.com/Toad2186/toad2186.github.io.src</code> and I&rsquo;ve created <code>https://github.com/Toad2186/toad2186.github.io</code> just for the <code>public</code> directory. Simple, but works. Shoot my a message if you&rsquo;ve got a better idea! Quite frankly, I&rsquo;m surprised Github doesn&rsquo;t allow one to customize the root directory&ndash;seems like it&rsquo;d be a frequently requested feature given that static website generators would probably create these &ldquo;build&rdquo; directories as an output! Perhaps this has something to do with their integration with <a href="https://help.github.com/articles/using-jekyll-as-a-static-site-generator-with-github-pages/">Jekyll</a>. This brings me to my next point, we&rsquo;d need to add a <code>.nojekyll</code> (which can be an empty file) to the public folder so that github ignores its automatic jekyll build.</p>
+
+<p>My last gripe with Github hosting is the lack of https which is sensible given the constraints. Unless they do some man-in-the-middle decryption/encryption or have an option for users to upload SSL certificates for their personal domains, it&rsquo;s not possible for Github to provide HTTPS hosting. Furthermore, virtual hosts (which is what I assume Github uses) gets complicated with HTTPS since the HTTP Host header is no longer readable&ndash;A <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-multiple-ssl-certificates-on-one-ip-with-apache-on-ubuntu-12-04">TLS Server Name Indication extension</a>is required for such a feat. So it&rsquo;s possible, but difficult. For now though, since there isn&rsquo;t any sensitive information flowing through these pages, http should be fine :).</p>
+
+	        </section>
+
+	        <section class="post-tags" style="padding-bottom:60px;">
+	            <div class="post-meta tags">
+	            <i class="fa fa-fw fa-tag"></i>
+	            
+	            <a href="http://toanvuong.io/tags/go">go </a>
+	            
+	            <a href="http://toanvuong.io/tags/golang">golang </a>
+	            
+	            <a href="http://toanvuong.io/tags/hugo">hugo </a>
+	            
+	            <a href="http://toanvuong.io/tags/blog">blog </a>
+	            
+	            <a href="http://toanvuong.io/tags/github">github </a>
+	            
+	            </div>
+	        </section>
+			
+			
+			
+			
+
+	        <section class="share">
+	            <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
+	            <p class="info prompt">Share</p>
+	            <a href="http://twitter.com/share?text=Hello%20World%21&url=http%3a%2f%2ftoanvuong.io%2fpost%2fhello-world%2f" title="Share on Twitter"
+	                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+	                <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
+	            </a>
+	            <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2ftoanvuong.io%2fpost%2fhello-world%2f" title="Share on Facebook"
+	                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+	                <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
+	            </a>
+	            <a href="https://plus.google.com/share?url=http%3a%2f%2ftoanvuong.io%2fpost%2fhello-world%2f" title="Share on Google+"
+	               onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+	                <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
+	            </a>
+	        </section>
+
+	        <footer class="post-footer">
+	            <section class="author">
+    <div class="authorimage" style="background: url(http://toanvuong.io/img/avatar.jpg)"></div>
+    <h4>Toan Vuong</h4>
+    <p class="bio">A software engineer with a passion to learn new things.</p>
+    <p class="meta">
+      
+    </p>
+</section>
+	        </footer>
+	    </article>
+	</main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+			
+		    
+		    <a href="//github.com/toad2186" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		</section>
+
+		<section class="copyright">&copy; 2016 <a href="http://toanvuong.io/">Toan Vuong</a>. </section>
+	</div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://toanvuong.io/js/index.js"></script>
+<script src="http://toanvuong.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+</body>
+</html>
