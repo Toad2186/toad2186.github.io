@@ -1,133 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on toan&#39;s thoughts</title>
-    <link>http://toanvuong.io/post/</link>
-    <description>Recent content in Posts on toan&#39;s thoughts</description>
+    <title>Github on toan&#39;s thoughts</title>
+    <link>http://toanvuong.io/tags/github/</link>
+    <description>Recent content in Github on toan&#39;s thoughts</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 25 Jul 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://toanvuong.io/post/index.xml" rel="self" type="application/rss+xml" />
-    
-    <item>
-      <title>pintos part 1</title>
-      <link>http://toanvuong.io/post/pintos-part-1/</link>
-      <pubDate>Mon, 25 Jul 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://toanvuong.io/post/pintos-part-1/</guid>
-      <description>
-
-&lt;h3 id=&#34;what-is-it&#34;&gt;&lt;strong&gt;What is it&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;While studying at Berkeley, I had friends who took our OS class. There, they used &lt;a href=&#34;http://people.eecs.berkeley.edu/~kubitron/courses/cs162-F05/Nachos/walk/walk.html&#34;&gt;nachos&lt;/a&gt;, which was an operating system designed specifically for the OS class there. Originally written in C++, it has since been ported to Java and the official documentations do a great job explaining what it is. The OS class, along with the networking class, are among the few classes which I regret not having taken at Berkeley. If I recall however, they&amp;rsquo;ve since upgraded to using &lt;a href=&#34;https://cs162.eecs.berkeley.edu/info/&#34;&gt;pintos&lt;/a&gt; which was developed at &lt;a href=&#34;https://web.stanford.edu/class/cs140/projects/pintos/pintos_1.html&#34;&gt;Stanford&lt;/a&gt;. I&amp;rsquo;ve chosen pintos merely through exposure: A friend of mine recently took the class at Stanford and recommends it!&lt;/p&gt;
-
-&lt;p&gt;I think as a developer, even if one doesn&amp;rsquo;t work directly at the OS level, knowledge &lt;em&gt;of&lt;/em&gt; the OS is still absolutely essential in writing good code (In fact, I&amp;rsquo;d argue that this extends to the hardware level as well). I read (The Design of the UNIX Operating System)[&lt;a href=&#34;https://www.amazon.com/Design-UNIX-Operating-System/dp/0132017997&#34;&gt;https://www.amazon.com/Design-UNIX-Operating-System/dp/0132017997&lt;/a&gt;] and loved it! In fact, I&amp;rsquo;m thinking about re-reading it one of these days. There&amp;rsquo;s a lot of insights into how UNIX was designed, and by (partial) extension, Linux. You get to learn about how the filesystem works, pipes, file descriptors, and lots more!&lt;/p&gt;
-
-&lt;h3 id=&#34;pintos&#34;&gt;&lt;strong&gt;pintos&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;Not wanting to pollute my local machine, I chose to go the Docker route. Pretty simple. The contents of my Dockerfile:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;FROM debian:jessie
-
-RUN apt-get clean &amp;amp;&amp;amp; apt-get update &amp;amp;&amp;amp; apt-get install --fix-missing -y nasm build-essential qemu gdb
-
-env PATH /pintos/src/utils:$PATH
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This installs a couple of packages on top of the standard installation that&amp;rsquo;ll be used later. The PATH export will be explained below.&lt;/p&gt;
-
-&lt;p&gt;At the time of writing, The Debian version is 8.5.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ /pintos/# cat /etc/debian_version
-8.5
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I then grabbed a copy of &lt;a href=&#34;pintos.zip&#34;&gt;pintos.zip&lt;/a&gt; and unzipped it to my local machine.&lt;/p&gt;
-
-&lt;p&gt;To build the Docker container, in the directory where we have our Dockerfile, run:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ sudo docker build -t pintos .
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This creates a Docker image using the Dockerfile located in the current directory and names it &amp;ldquo;pintos.&amp;rdquo; After having built the Docker image as specified above (It might take a while, and for me, the &lt;code&gt;apt-get&lt;/code&gt; command occasionally fails with a TCP error so I have to re-run the command until it builds successfully), I run it with:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ sudo docker run -it -v ~/pintos:/pintos pintos /bin/bash
--it is for interactive mode
--v is to mount a local directory as a directory on the Docker host. Note that I unzipped the pintos source into ~/pintos
-pintos is the name given to my Docker image
-/bin/bash is the command to run on startup
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;now-we-re-talking&#34;&gt;&lt;strong&gt;Now we&amp;rsquo;re talking&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;Once you&amp;rsquo;re in, there&amp;rsquo;s on last step to ensure things work properly. My workflow consists of editing things on my VM and &lt;em&gt;running&lt;/em&gt; things in my Docker image. There&amp;rsquo;s no reason why you can&amp;rsquo;t edit things in the Docker image (Though you&amp;rsquo;d need to ensure your favorite text editor is installed!)&lt;/p&gt;
-
-&lt;p&gt;Anyways, the file we&amp;rsquo;re interested in is under &lt;code&gt;pintos/src/utils/pintos-gdb&lt;/code&gt;. Open it up and modify the &lt;code&gt;GDBMACROS&lt;/code&gt; variable to:
-&lt;code&gt;GDBMACROS=/pintos/src/misc/gdb-macros&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;If you&amp;rsquo;ve followed everything thus far, &lt;code&gt;PATH&lt;/code&gt; should include the &lt;code&gt;/pintos/src/utils&lt;/code&gt; directory, which would allow for you to run the scripts there, including &lt;code&gt;pintos-gdb&lt;/code&gt; and &lt;code&gt;pintos&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Now, within the Docker container, run &lt;code&gt;pintos-gdb&lt;/code&gt; and ensure that it does &lt;em&gt;not&lt;/em&gt; output:
-&lt;code&gt;*** Pintos GDB macros will not be available ***&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;The full output should be similar to the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ pintos-gdb
-GNU gdb (Debian 7.7.1+dfsg-5) 7.7.1
-Copyright (C) 2014 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later &amp;lt;http://gnu.org/licenses/gpl.html&amp;gt;
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.  Type &amp;quot;show copying&amp;quot;
-and &amp;quot;show warranty&amp;quot; for details.
-This GDB was configured as &amp;quot;x86_64-linux-gnu&amp;quot;.
-Type &amp;quot;show configuration&amp;quot; for configuration details.
-For bug reporting instructions, please see:
-&amp;lt;http://www.gnu.org/software/gdb/bugs/&amp;gt;.
-Find the GDB manual and other documentation resources online at:
-&amp;lt;http://www.gnu.org/software/gdb/documentation/&amp;gt;.
-For help, type &amp;quot;help&amp;quot;.
-Type &amp;quot;apropos word&amp;quot; to search for commands related to &amp;quot;word&amp;quot;.
-(gdb)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can now quit &lt;code&gt;gdb&lt;/code&gt; by typing &lt;code&gt;q&lt;/code&gt; followed by &lt;code&gt;Enter&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Finally, we&amp;rsquo;ll also need to ensure pintos uses qemu by default instead of bochs. Both are OS emulators but qemu is the one we&amp;rsquo;ve chosen to use.&lt;/p&gt;
-
-&lt;h3 id=&#34;running-your-first-pintos-application&#34;&gt;&lt;strong&gt;Running your first pintos application&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;Now that we have everything setup, we can now build the threads module. Start by going into the threads directory:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cd /pintos/src/threads/
-$ make # You can add a -j to run make in parallel
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now we&amp;rsquo;re ready to run our first application:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cd build
-$ pintos run alarm-multiple
-Use of literal control characters in variable names is deprecated at /pintos/src/utils/pintos line 915.
-Prototype mismatch: sub main::SIGVTALRM () vs none at /pintos/src/utils/pintos line 939.
-Constant subroutine SIGVTALRM redefined at /pintos/src/utils/pintos line 931.
-qemu-system-i386 -device isa-debug-exit -hda /tmp/QUCaIlCx91.dsk -m 4 -net none -nographic -monitor null
-PiLo hda1
-Loading...........
-Kernel command line: run alarm-multiple
-Pintos booting with 3,968 kB RAM...
-367 pages available in kernel pool.
-367 pages available in user pool.
-Calibrating timer...  602,112,000 loops/s.
-Boot complete.
-Executing &#39;alarm-multiple&#39;:
-(alarm-multiple) begin
-(alarm-multiple) Creating 5 threads to sleep 7 times each.
-(alarm-multiple) Thread 0 sleeps 10 ticks each time,
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Congratulations! It&amp;rsquo;s a very uneventful example but exciting nonetheless. Now we can follow the rest of the assignment from the official &lt;a href=&#34;https://web.stanford.edu/class/cs140/projects/pintos/pintos.html#SEC_Contents&#34;&gt;website&lt;/a&gt;. See you at the finish line!&lt;/p&gt;
-</description>
-    </item>
+    <lastBuildDate>Sun, 24 Jul 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://toanvuong.io/tags/github/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Hello World!</title>

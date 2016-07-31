@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>pintos part 1 &middot; toan&#39;s thoughts</title>
+    <meta name="author" content="Toan Vuong">
+    <meta name="description" content="Home of the other part of my brain">
+    <meta name="generator" content="Hugo 0.16" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://toanvuong.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.2/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://toanvuong.io/css/screen.css">
+    <link rel="stylesheet" href="http://toanvuong.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/default.min.css">
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="post-template">
+
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://toanvuong.io/">toan&rsquo;s thoughts</a></h1>
+	
+	
+	<h1 class="blog-subtitle">random brain dump</h1>
+	
+</header>
+    
+<nav class="menu" role="nav">
+    <ul>
+        
+        	<li class="nav nav-current"><a href="/about/">about</a></li>
+      	
+        	<li class="nav nav-current"><a href="/contact/">contact</a></li>
+      	
+    </ul>
+</nav>
+
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">pintos part 1</h1>
+	        <div class="post-meta"><time datetime="25 July 2016">25 July 2016</time></div>
+	        </header>
+
+	        <section class="post-content">
+	            
+
+<h3 id="what-is-it"><strong>What is it</strong></h3>
+
+<p>While studying at Berkeley, I had friends who took our OS class. There, they used <a href="http://people.eecs.berkeley.edu/~kubitron/courses/cs162-F05/Nachos/walk/walk.html">nachos</a>, which was an operating system designed specifically for the OS class there. Originally written in C++, it has since been ported to Java and the official documentations do a great job explaining what it is. The OS class, along with the networking class, are among the few classes which I regret not having taken at Berkeley. If I recall however, they&rsquo;ve since upgraded to using <a href="https://cs162.eecs.berkeley.edu/info/">pintos</a> which was developed at <a href="https://web.stanford.edu/class/cs140/projects/pintos/pintos_1.html">Stanford</a>. I&rsquo;ve chosen pintos merely through exposure: A friend of mine recently took the class at Stanford and recommends it!</p>
+
+<p>I think as a developer, even if one doesn&rsquo;t work directly at the OS level, knowledge <em>of</em> the OS is still absolutely essential in writing good code (In fact, I&rsquo;d argue that this extends to the hardware level as well). I read (The Design of the UNIX Operating System)[<a href="https://www.amazon.com/Design-UNIX-Operating-System/dp/0132017997">https://www.amazon.com/Design-UNIX-Operating-System/dp/0132017997</a>] and loved it! In fact, I&rsquo;m thinking about re-reading it one of these days. There&rsquo;s a lot of insights into how UNIX was designed, and by (partial) extension, Linux. You get to learn about how the filesystem works, pipes, file descriptors, and lots more!</p>
+
+<h3 id="pintos"><strong>pintos</strong></h3>
+
+<p>Not wanting to pollute my local machine, I chose to go the Docker route. Pretty simple. The contents of my Dockerfile:</p>
+
+<pre><code>FROM debian:jessie
+
+RUN apt-get clean &amp;&amp; apt-get update &amp;&amp; apt-get install --fix-missing -y nasm build-essential qemu gdb
+
+env PATH /pintos/src/utils:$PATH
+</code></pre>
+
+<p>This installs a couple of packages on top of the standard installation that&rsquo;ll be used later. The PATH export will be explained below.</p>
+
+<p>At the time of writing, The Debian version is 8.5.</p>
+
+<pre><code>$ /pintos/# cat /etc/debian_version
+8.5
+</code></pre>
+
+<p>I then grabbed a copy of <a href="pintos.zip">pintos.zip</a> and unzipped it to my local machine.</p>
+
+<p>To build the Docker container, in the directory where we have our Dockerfile, run:</p>
+
+<pre><code>$ sudo docker build -t pintos .
+</code></pre>
+
+<p>This creates a Docker image using the Dockerfile located in the current directory and names it &ldquo;pintos.&rdquo; After having built the Docker image as specified above (It might take a while, and for me, the <code>apt-get</code> command occasionally fails with a TCP error so I have to re-run the command until it builds successfully), I run it with:</p>
+
+<pre><code>$ sudo docker run -it -v ~/pintos:/pintos pintos /bin/bash
+-it is for interactive mode
+-v is to mount a local directory as a directory on the Docker host. Note that I unzipped the pintos source into ~/pintos
+pintos is the name given to my Docker image
+/bin/bash is the command to run on startup
+</code></pre>
+
+<h3 id="now-we-re-talking"><strong>Now we&rsquo;re talking</strong></h3>
+
+<p>Once you&rsquo;re in, there&rsquo;s on last step to ensure things work properly. My workflow consists of editing things on my VM and <em>running</em> things in my Docker image. There&rsquo;s no reason why you can&rsquo;t edit things in the Docker image (Though you&rsquo;d need to ensure your favorite text editor is installed!)</p>
+
+<p>Anyways, the file we&rsquo;re interested in is under <code>pintos/src/utils/pintos-gdb</code>. Open it up and modify the <code>GDBMACROS</code> variable to:
+<code>GDBMACROS=/pintos/src/misc/gdb-macros</code></p>
+
+<p>If you&rsquo;ve followed everything thus far, <code>PATH</code> should include the <code>/pintos/src/utils</code> directory, which would allow for you to run the scripts there, including <code>pintos-gdb</code> and <code>pintos</code>.</p>
+
+<p>Now, within the Docker container, run <code>pintos-gdb</code> and ensure that it does <em>not</em> output:
+<code>*** Pintos GDB macros will not be available ***</code></p>
+
+<p>The full output should be similar to the following:</p>
+
+<pre><code>$ pintos-gdb
+GNU gdb (Debian 7.7.1+dfsg-5) 7.7.1
+Copyright (C) 2014 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;
+and &quot;show warranty&quot; for details.
+This GDB was configured as &quot;x86_64-linux-gnu&quot;.
+Type &quot;show configuration&quot; for configuration details.
+For bug reporting instructions, please see:
+&lt;http://www.gnu.org/software/gdb/bugs/&gt;.
+Find the GDB manual and other documentation resources online at:
+&lt;http://www.gnu.org/software/gdb/documentation/&gt;.
+For help, type &quot;help&quot;.
+Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;.
+(gdb)
+</code></pre>
+
+<p>We can now quit <code>gdb</code> by typing <code>q</code> followed by <code>Enter</code>.</p>
+
+<p>Finally, we&rsquo;ll also need to ensure pintos uses qemu by default instead of bochs. Both are OS emulators but qemu is the one we&rsquo;ve chosen to use.</p>
+
+<h3 id="running-your-first-pintos-application"><strong>Running your first pintos application</strong></h3>
+
+<p>Now that we have everything setup, we can now build the threads module. Start by going into the threads directory:</p>
+
+<pre><code>$ cd /pintos/src/threads/
+$ make # You can add a -j to run make in parallel
+</code></pre>
+
+<p>Now we&rsquo;re ready to run our first application:</p>
+
+<pre><code>$ cd build
+$ pintos run alarm-multiple
+Use of literal control characters in variable names is deprecated at /pintos/src/utils/pintos line 915.
+Prototype mismatch: sub main::SIGVTALRM () vs none at /pintos/src/utils/pintos line 939.
+Constant subroutine SIGVTALRM redefined at /pintos/src/utils/pintos line 931.
+qemu-system-i386 -device isa-debug-exit -hda /tmp/QUCaIlCx91.dsk -m 4 -net none -nographic -monitor null
+PiLo hda1
+Loading...........
+Kernel command line: run alarm-multiple
+Pintos booting with 3,968 kB RAM...
+367 pages available in kernel pool.
+367 pages available in user pool.
+Calibrating timer...  602,112,000 loops/s.
+Boot complete.
+Executing 'alarm-multiple':
+(alarm-multiple) begin
+(alarm-multiple) Creating 5 threads to sleep 7 times each.
+(alarm-multiple) Thread 0 sleeps 10 ticks each time,
+...
+</code></pre>
+
+<p>Congratulations! It&rsquo;s a very uneventful example but exciting nonetheless. Now we can follow the rest of the assignment from the official <a href="https://web.stanford.edu/class/cs140/projects/pintos/pintos.html#SEC_Contents">website</a>. See you at the finish line!</p>
+
+	        </section>
+
+	        <section class="post-tags" style="padding-bottom:60px;">
+	            <div class="post-meta tags">
+	            <i class="fa fa-fw fa-tag"></i>
+	            
+	            <a href="http://toanvuong.io/tags/os">os </a>
+	            
+	            <a href="http://toanvuong.io/tags/pintos">pintos </a>
+	            
+	            <a href="http://toanvuong.io/tags/c-lang">c-lang </a>
+	            
+	            <a href="http://toanvuong.io/tags/stanford">stanford </a>
+	            
+	            <a href="http://toanvuong.io/tags/fun">fun </a>
+	            
+	            <a href="http://toanvuong.io/tags/development">development </a>
+	            
+	            <a href="http://toanvuong.io/tags/learning">learning </a>
+	            
+	            </div>
+	        </section>
+			
+			
+			
+			
+
+	        <section class="share">
+	            <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
+	            <p class="info prompt">Share</p>
+	            <a href="http://twitter.com/share?text=pintos%20part%201&url=http%3a%2f%2ftoanvuong.io%2fpost%2fpintos-part-1%2f" title="Share on Twitter"
+	                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+	                <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
+	            </a>
+	            <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2ftoanvuong.io%2fpost%2fpintos-part-1%2f" title="Share on Facebook"
+	                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+	                <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
+	            </a>
+	            <a href="https://plus.google.com/share?url=http%3a%2f%2ftoanvuong.io%2fpost%2fpintos-part-1%2f" title="Share on Google+"
+	               onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+	                <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
+	            </a>
+	        </section>
+
+	        <footer class="post-footer">
+	            <section class="author">
+    <div class="authorimage" style="background: url(http://toanvuong.io/img/avatar.jpg)"></div>
+    <h4>Toan Vuong</h4>
+    <p class="bio">A software engineer with a passion to learn new things.</p>
+    <p class="meta">
+      
+    </p>
+</section>
+	        </footer>
+	    </article>
+	</main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+			
+		    
+		    <a href="//github.com/toad2186" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		</section>
+
+		<section class="copyright">&copy; 2016 <a href="http://toanvuong.io/">Toan Vuong</a>. </section>
+	</div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://toanvuong.io/js/index.js"></script>
+<script src="http://toanvuong.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+</body>
+</html>
