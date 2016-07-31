@@ -70,7 +70,7 @@
 
 <p>While studying at Berkeley, I had friends who took our OS class. There, they used <a href="http://people.eecs.berkeley.edu/~kubitron/courses/cs162-F05/Nachos/walk/walk.html">nachos</a>, which was an operating system designed specifically for the OS class there. Originally written in C++, it has since been ported to Java and the official documentations do a great job explaining what it is. The OS class, along with the networking class, are among the few classes which I regret not having taken at Berkeley. If I recall however, they&rsquo;ve since upgraded to using <a href="https://cs162.eecs.berkeley.edu/info/">pintos</a> which was developed at <a href="https://web.stanford.edu/class/cs140/projects/pintos/pintos_1.html">Stanford</a>. I&rsquo;ve chosen pintos merely through exposure: A friend of mine recently took the class at Stanford and recommends it!</p>
 
-<p>I think as a developer, even if one doesn&rsquo;t work directly at the OS level, knowledge <em>of</em> the OS is still absolutely essential in writing good code (In fact, I&rsquo;d argue that this extends to the hardware level as well). I read (The Design of the UNIX Operating System)[<a href="https://www.amazon.com/Design-UNIX-Operating-System/dp/0132017997">https://www.amazon.com/Design-UNIX-Operating-System/dp/0132017997</a>] and loved it! In fact, I&rsquo;m thinking about re-reading it one of these days. There&rsquo;s a lot of insights into how UNIX was designed, and by (partial) extension, Linux. You get to learn about how the filesystem works, pipes, file descriptors, and lots more!</p>
+<p>I think as a developer, even if one doesn&rsquo;t work directly at the OS level, knowledge <em>of</em> the OS is still absolutely essential in writing good code (In fact, I&rsquo;d argue that this extends to the hardware level as well). I read <a href="https://www.amazon.com/Design-UNIX-Operating-System/dp/0132017997">The Design of the UNIX Operating System</a> and loved it! In fact, I&rsquo;m thinking about re-reading it one of these days. There&rsquo;s a lot of insights into how UNIX was designed, and by (partial) extension, Linux. You get to learn about how the filesystem works, pipes, file descriptors, and lots more!</p>
 
 <h3 id="pintos"><strong>pintos</strong></h3>
 
@@ -141,7 +141,10 @@ Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;
 
 <p>We can now quit <code>gdb</code> by typing <code>q</code> followed by <code>Enter</code>.</p>
 
-<p>Finally, we&rsquo;ll also need to ensure pintos uses qemu by default instead of bochs. Both are OS emulators but qemu is the one we&rsquo;ve chosen to use.</p>
+<p>Finally, we&rsquo;ll also need to ensure pintos uses qemu by default instead of bochs. Both are OS emulators but qemu is the one we&rsquo;ve chosen to use. Open up <code>/pintos/src/utils/pintos</code> and look at line 103. It should be changed to:</p>
+
+<pre><code>    $sim = &quot;qemu&quot; if !defined $sim;
+</code></pre>
 
 <h3 id="running-your-first-pintos-application"><strong>Running your first pintos application</strong></h3>
 
